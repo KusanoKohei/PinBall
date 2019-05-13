@@ -24,26 +24,113 @@ public class FripperController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //タッチコントロール関数取得
+        touch_control();
 
-        //左矢印キーを押した時左フリッパーを動かす
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && tag == "LeftFripperTag")
-        {
-            SetAngle(this.flickAngle);
-        }
-        //右矢印キーを押した時右フリッパーを動かす
-        if (Input.GetKeyDown(KeyCode.RightArrow) && tag == "RightFripperTag")
-        {
-            SetAngle(this.flickAngle);
-        }
+            //左矢印キーを押した時左フリッパーを動かす
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && tag == "LeftFripperTag")
+            {
+                SetAngle(this.flickAngle);
+            }
 
-        //矢印キー離された時フリッパーを元に戻す
-        if (Input.GetKeyUp(KeyCode.LeftArrow) && tag == "LeftFripperTag")
+            //右矢印キーを押した時右フリッパーを動かす
+            if (Input.GetKeyDown(KeyCode.RightArrow) && tag == "RightFripperTag")
+            {
+                SetAngle(this.flickAngle);
+            }
+
+            //タッチを離した瞬間にフリッパーを戻す || 矢印キー離された時フリッパーを元に戻す
+            if (Input.GetKeyUp(KeyCode.LeftArrow) && tag == "LeftFripperTag")
+            {
+                SetAngle(this.defaultAngle);
+            }
+            if (Input.GetKeyUp(KeyCode.RightArrow) && tag == "RightFripperTag")
+            {
+                SetAngle(this.defaultAngle);
+            }
+    }
+
+
+    //タッチ操作関数
+    void touch_control()
+    {
+
+        //画面サイズを取得
+        int width = Screen.width;
+        int height = Screen.height;
+
+        //タッチされた座標を検出
+        var x = Input.mousePosition.x;
+        var y = Input.mousePosition.y;
+
+
+        //タッチされているかチェック
+        if (Input.touchCount > 0)
         {
-            SetAngle(this.defaultAngle);
-        }
-        if (Input.GetKeyUp(KeyCode.RightArrow) && tag == "RightFripperTag")
-        {
-            SetAngle(this.defaultAngle);
+            Touch[] mytouches = Input.touches;
+
+            for(int i=0; i < mytouches.Length; i++) { 
+                //もし画面左側がタッチされたなら
+                if ((mytouches[i].phase == TouchPhase.Began)&&(x<=(width/2)) && tag == "LeftFripperTag")
+                {
+                    //Debug.Log("左側");
+                    SetAngle(this.flickAngle);
+                }
+
+                //もし画面左側にタッチした手が離れたなら
+                if ((mytouches[i].phase == TouchPhase.Ended) && (x <= (width / 2)) && tag == "LeftFripperTag")
+                {
+                    //Debug.Log("左側、無効");
+                    SetAngle(this.defaultAngle);
+
+                }
+
+                //もし画面右側がタッチされたなら
+                if ((mytouches[i].phase == TouchPhase.Began) && ((width / 2) < x) && tag == "RightFripperTag")
+                {
+                    //Debug.Log("右側");
+                    SetAngle(this.flickAngle);
+                }
+
+                //もし画面右側にタッチした手が離れたなら
+                if ((mytouches[i].phase == TouchPhase.Ended) && ((width / 2) < x) && tag == "RightFripperTag")
+                {
+                    //Debug.Log("右側、無効");
+                    SetAngle(this.defaultAngle);
+                }
+
+            }
+            /*
+
+
+            
+                //画面左側をタッチした時に左フリッパーを動かす
+                if ((hidari=true) && tag == "LeftFripperTag")
+                {
+                    SetAngle(this.flickAngle);
+                    Debug.Log("左側");
+                }
+
+                //画面右側をタッチした時右フリッパーを動かす
+                if ((migi=true) && tag == "RightFripperTag")
+                {
+                    SetAngle(this.flickAngle);
+                    Debug.Log("右側");
+                }
+
+            //タッチを離した瞬間にフリッパーを戻す
+            if ((touch.phase == TouchPhase.Ended)&& tag == "LeftFripperTag")
+            {
+                SetAngle(this.defaultAngle);
+                hidari = false;
+            }
+            if ((touch.phase == TouchPhase.Ended)&& tag == "RightFripperTag")
+            {
+                SetAngle(this.defaultAngle);
+                migi = false;
+            }
+
+    */
         }
     }
 
